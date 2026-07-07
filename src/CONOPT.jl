@@ -2,7 +2,12 @@ module CONOPT
 
 using Preferences
 
-const libconopt = @load_preference("libconopt_path", get(ENV, "CONOPT_LIB", "conopt"))
+# 1. Safely load the preference at compile-time to trigger recompilation if the TOML changes.
+# Default to an empty string instead of resolving the ENV variable here!
+const PREF_LIBCONOPT = @load_preference("libconopt_path", "")
+
+# 2. Use a typed global for our runtime library path
+global libconopt::String = "conopt"
 
 """
     set_library_path(path::String)
@@ -38,6 +43,17 @@ function set_license(licint1::Int, licint2::Int, licint3::Int, licstring::String
 end
 
 function __init__()
+    global libconopt
+
+    # 3. Resolve the path dynamically AT RUNTIME every single time the module loads
+    if PREF_LIBCONOPT != ""
+        libconopt = PREF_LIBCONOPT
+    elseif haskey(ENV, "CONOPT_LIB")
+        libconopt = ENV["CONOPT_LIB"]
+    else
+        libconopt = "conopt"
+    end
+
     if libconopt == "conopt" || !isfile(libconopt)
         # Check if Julia is currently generating a precompile cache (.ji file)
         is_precompiling = ccall(:jl_generating_output, Cint, ()) != 0
@@ -47,6 +63,7 @@ function __init__()
             CONOPT library not found!
             Please set the path to the CONOPT shared library using:
             `CONOPT.set_library_path("/path/to/libconopt.so")`
+            or set the CONOPT_LIB environment variable.
             and then restart Julia.
             """
         end
