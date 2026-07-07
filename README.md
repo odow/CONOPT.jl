@@ -17,7 +17,7 @@ This wrapper is maintained by GAMS Software GmbH.
 
 The underlying solver, CONOPT, is proprietary software from GAMS.
 There are various [licensing options](https://conopt.gams.com/licensing/) for CONOPT.
-These include Demo, Evaluation, Academic and Full licences.
+These include Demo, Evaluation, Academic, and Full licences.
 
 The Academic license gives you full access to CONOPT, if you satisfy the following:
 - affiliated with a recognized academic institution, and
@@ -69,7 +69,7 @@ If you have a reproducible example of a bug, please [open a GitHub issue](https:
 
 To use `CONOPT.jl`, you must have a local installation of the CONOPT solver libraries. Please see the [CONOPT website](https://conopt.gams.com/download/) for information on obtaining CONOPT.
 
-`CONOPT.jl` needs to know the location of the CONOPT shared library (e.g., `libconopt.so`, `conopt.dll`, or `conopt.dylib`).
+`CONOPT.jl` needs to know the location of the CONOPT shared library (for example `libconopt.so`, `conopt.dll`, or `conopt.dylib`).
 Tell `CONOPT.jl` where to find the library by calling `CONOPT.set_library_path`:
 ```julia
 import CONOPT
@@ -92,6 +92,21 @@ using JuMP, CONOPT
 model = Model(CONOPT.Optimizer)
 set_attribute(model, "lim_iteration", 100)
 set_attribute(model, "log_level", 0)
+```
+
+A small example building a solving a model with CONOPT:
+```julia
+using JuMP
+using CONOPT
+
+model = Model(CONOPT.Optimizer)
+
+@variable(model, x0)
+@variable(model, x1)
+@constraint(model, -3*x0^2 + 2*x0*x1 - x1^2 >= -1)
+@objective(model, Min, x0 - x1)
+
+optimize!(model)
 ```
 
 ### Type stability
