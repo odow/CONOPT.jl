@@ -1,11 +1,10 @@
 name = "CONOPT"
 uuid = "d9ad0738-0ae8-416d-b8ee-a56302d35586"
 version = "0.1.0"
-repo = "TODO"
+repo = "https://github.com/GAMS-dev/CONOPT.jl.git""
 
 [deps]
 CEnum = "fa961155-64e5-5f13-b03f-caf6b980ea82"
-JuliaFormatter = "98e50ef6-434e-11e9-1051-2b60c6c9e899"
 PrecompileTools = "aea7be01-6a6a-4083-8856-8a6e6704d82a"
 Preferences = "21216c6a-2e73-6563-6e65-726566657250"
 
@@ -16,10 +15,9 @@ MathOptInterface = "b8f27783-ece8-5eb3-8dc8-9495eed66fee"
 ConoptMathOptInterfaceExt = "MathOptInterface"
 
 [compat]
-CEnum = "0.5.0"
-JuliaFormatter = "0"
-MathOptInterface = "1.48.0"
-PrecompileTools = "1.0.0"
+CEnum = "0.5"
+MathOptInterface = "1.48"
+PrecompileTools = "1"
 Preferences = "1.5.2"
 Test = "1"
 julia = "1.9"
@@ -29,4 +27,4 @@ MathOptInterface = "b8f27783-ece8-5eb3-8dc8-9495eed66fee"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]
-test = ["Test", "MathOptInterface"]
+test = ["MathOptInterface", "Test"]
